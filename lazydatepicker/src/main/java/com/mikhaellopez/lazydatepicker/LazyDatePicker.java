@@ -57,7 +57,6 @@ public class LazyDatePicker extends RelativeLayout {
     private Date minDate;
     private Date maxDate;
     private DateFormat dateFormat;
-    private boolean keyboardVisible = false;
     private boolean shakeAnimationDoing = false;
     private OnDatePickListener onDatePickListener;
 
@@ -185,19 +184,6 @@ public class LazyDatePicker extends RelativeLayout {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (!isInEditMode()) {
-
-            addKeyboardVisibilityListener(this, new OnKeyboardVisibilityListener() {
-                @Override
-                public void onVisibilityChange(boolean isVisible) {
-                    if (keyboardVisible != isVisible) {
-                        keyboardVisible = isVisible;
-                        if (!keyboardVisible && editLazyDatePickerReal.isFocused()) {
-                            editLazyDatePickerReal.clearFocus();
-
-                        }
-                    }
-                }
-            });
 
             editLazyDatePickerReal.setOnFocusChangeListener(new OnFocusChangeListener() {
                 @Override
@@ -536,28 +522,6 @@ public class LazyDatePicker extends RelativeLayout {
     }
     //endregion
 
-    //region KEYBOARD
-    private void addKeyboardVisibilityListener(final View rootLayout, final OnKeyboardVisibilityListener onKeyboardVisibilityListener) {
-        rootLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                Rect r = new Rect();
-                rootLayout.getWindowVisibleDisplayFrame(r);
-                int screenHeight = rootLayout.getRootView().getHeight();
-
-                // r.bottom is the position above soft keypad or device button.
-                // if keypad is shown, the r.bottom is smaller than that before.
-                int keypadHeight = screenHeight - r.bottom;
-
-                boolean isVisible = keypadHeight > screenHeight * 0.15; // 0.15 ratio is perhaps enough to determine keypad height.
-                onKeyboardVisibilityListener.onVisibilityChange(isVisible);
-            }
-        });
-    }
-
-    private interface OnKeyboardVisibilityListener {
-        void onVisibilityChange(boolean isVisible);
-    }
 
     private void showKeyboard(Context context) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
