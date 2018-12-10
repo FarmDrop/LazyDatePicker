@@ -560,7 +560,7 @@ public class LazyDatePicker extends RelativeLayout {
 
     private void showKeyboard(Context context) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (inputMethodManager != null) inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        if (inputMethodManager != null) inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
     }
 
     private void hideKeyBoard(Context context) {
