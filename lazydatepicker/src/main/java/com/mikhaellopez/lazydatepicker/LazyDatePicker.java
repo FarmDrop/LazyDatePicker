@@ -168,9 +168,6 @@ public class LazyDatePicker extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 editLazyDatePickerReal.requestFocus();
-                if (!keyboardVisible) {
-                    showKeyboard(getContext());
-                }
             }
         });
     }
@@ -207,7 +204,11 @@ public class LazyDatePicker extends RelativeLayout {
                 public void onFocusChange(View v, boolean hasFocus) {
                     showDate(date, hasFocus);
                     showFullDateLayout(hasFocus);
-                    if (!hasFocus) hideKeyBoard(getContext());
+                    if (hasFocus) {
+                        showKeyboard(getContext());
+                    } else {
+                        hideKeyBoard(getContext());
+                    }
                 }
             });
 
@@ -560,12 +561,13 @@ public class LazyDatePicker extends RelativeLayout {
 
     private void showKeyboard(Context context) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (inputMethodManager != null) inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+        if (inputMethodManager != null)
+            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
     }
 
     private void hideKeyBoard(Context context) {
-        InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if(imm != null) imm.hideSoftInputFromWindow(this.getWindowToken(), 0);
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) imm.hideSoftInputFromWindow(this.getWindowToken(), 0);
     }
 
     //region UTILS
