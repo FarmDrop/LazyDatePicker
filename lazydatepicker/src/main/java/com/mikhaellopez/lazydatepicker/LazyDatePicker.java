@@ -176,6 +176,15 @@ public class LazyDatePicker extends RelativeLayout {
     }
 
     @Override
+    public void onWindowFocusChanged(boolean hasWindowFocus) {
+        super.onWindowFocusChanged(hasWindowFocus);
+        if (!hasWindowFocus) // onPause() called
+        {
+            hideKeyBoard(getContext());
+        }
+    }
+
+    @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (!isInEditMode()) {
@@ -187,6 +196,7 @@ public class LazyDatePicker extends RelativeLayout {
                         keyboardVisible = isVisible;
                         if (!keyboardVisible && editLazyDatePickerReal.isFocused()) {
                             editLazyDatePickerReal.clearFocus();
+
                         }
                     }
                 }
@@ -197,6 +207,7 @@ public class LazyDatePicker extends RelativeLayout {
                 public void onFocusChange(View v, boolean hasFocus) {
                     showDate(date, hasFocus);
                     showFullDateLayout(hasFocus);
+                    if (!hasFocus) hideKeyBoard(getContext());
                 }
             });
 
@@ -551,7 +562,11 @@ public class LazyDatePicker extends RelativeLayout {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null) inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
-    //endregion
+
+    private void hideKeyBoard(Context context) {
+        InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(imm != null) imm.hideSoftInputFromWindow(this.getWindowToken(), 0);
+    }
 
     //region UTILS
     private String getLetterAt(int position, String value) {
@@ -636,5 +651,4 @@ public class LazyDatePicker extends RelativeLayout {
             throw new IllegalArgumentException("This value is not supported for DateFormat: " + value);
         }
     }
-
 }
